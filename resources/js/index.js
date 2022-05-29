@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', event => {
         console.log("no hay inicio de instrucciones.")
     }
 
+    console.log(cinta);
+
     // Cargar a la IG la cadena     
     leerInstrucciones();
 
@@ -187,6 +189,7 @@ let identificarVariable = () => {
 }
 
 let asignarValor = (variable) => {
+
     let cases // ignorar a la izquierda
     let esc // ignorar a la derecha
     let aux
@@ -197,25 +200,35 @@ let asignarValor = (variable) => {
         aux = 'A'
         condEscape = 'B'
     } else if (variable === "B") {
-        cases = ["0", "1", "S", "T", "C",]
+        cases = ["0", "1", "S", "T", "C"]
         esc = ["0", "1", "S", "T"]
         aux = 'B'
         condEscape = 'C'
     } else {
-        cases = ["0", "1", "S", "T",]
+        cases = ["0", "1", "S", "T"]
         esc = ["0", "1", "S"]
         aux = 'C'
         condEscape = 'T'
+        console.log("Entro a C")
     }
-    let bandera = true;
-    while (bandera) {
+    console.log("el cabezal se encuentra aqui", posicion, cinta[posicion])
+    console.log(cases.includes(cinta[posicion]))
+
+
+    
+
+    for (let i = 0; i < 4; i++) {
+
         switch (estadoActual) {
             case '0':
                 cinta[posicion] = 'X'
-                estadoActual = posicion--;
+                posicion--;
+
                 // Ciclo para ignorar a la izquierda y ubicarnos sobre la variable
-                while (cases.includes(cinta[posicion]) && posicion >= 0) {
+                while (cases.includes(cinta[posicion])) {
+
                     posicion--;
+
                 }
 
                 if (cinta[posicion] === aux) {
@@ -225,21 +238,24 @@ let asignarValor = (variable) => {
                 posicion++;
                 if (cinta[posicion] != condEscape) {
                     cinta[posicion] = 'X'
-                    while (cases.includes(cinta[posicion]) && posicion < cinta.length) {
+                    while (cases.includes(cinta[posicion])) {
                         posicion++;
                     }
                     cinta[posicion] = '0';
                     posicion++;
                 } else {
-                    while (esc.includes(cinta[posicion]) && posicion <= cinta.length) {
+                    while (esc.includes(cinta[posicion])) {
                         posicion++;
                     }
-                    bandera = false
+                    console.log("Este es el caracter ---->", cinta[posicion])
+                    estadoActual = cinta[posicion]
+                    posicion=-1
+                    
                 }
                 break;
             case '1':
                 cinta[posicion] = 'Y'
-                estadoActual = posicion--;
+                posicion--;
                 // Ciclo para ignorar a la izquierda y ubicarnos sobre la variable
                 while (cases.includes(cinta[posicion]) && posicion >= 0) {
                     posicion--;
@@ -260,12 +276,20 @@ let asignarValor = (variable) => {
                 } else {
                     while (esc.includes(cinta[posicion]) && posicion <= cinta.length) {
                         posicion++;
+                        estadoActual = cinta[posicion]
                     }
-                    bandera = false
+                    console.log("Este es el caracter ----> ", cinta[posicion])
+                    estadoActual = cinta[posicion]
+                    posicion=-1
+                    
                 }
                 break;
             default:
+                estadoActual = cinta[posicion]
+                
                 break;
         }
+        
     }
+    
 }
