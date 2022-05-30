@@ -1,4 +1,4 @@
-let cadena = "A0000B0000C0000T0000S000100100"; // 0110011010111101110111
+let cadena = "A0000B0000C0000T0000S000011010000001001"; // 00 0110011010111101110111
 let posicion = 0; // Posición de la cinta
 let cinta = cadena.split("");
 let estadoActual = 'A'; // Valor que se toma en el estado actual
@@ -33,10 +33,12 @@ let validar = (cadena) => {
  * Permite leer las instrucciones iniciales y determinar la función a ejecutar
  */
 let leerInstrucciones = () => {
-    while (estadoActual != '-1' || posicion < cinta.length) {
-        switch (estadoActual) {
+    while (estadoActual != '-1' && posicion < cinta.length) {
+        console.log("esta es la cinta posicio del primer caso---->",cinta[posicion-1])
+        switch ( cinta[posicion]) {
             case '0':
                 posicion++;
+                
                 switch (cinta[posicion]) {
                     case '0':
                         posicion++;
@@ -44,6 +46,9 @@ let leerInstrucciones = () => {
                             case '0':
                                 posicion++;
                                 estadoActual = cinta[posicion]
+
+                                
+                                console.log("Entro a identificar variable---->",posicion,estadoActual)
                                 identificarVariable();
                                 break;
                             case '1':
@@ -168,7 +173,8 @@ let identificarVariable = () => {
                 switch (cinta[posicion]) {
                     case '0':
                         posicion++;
-                        asignarValor("C")
+                        console.log("Identifico a C como variable")
+                        asignarValor("C")                        
                         bandera = false
 
                         break;
@@ -212,77 +218,149 @@ let asignarValor = (variable) => {
         console.log("Entro a C")
     }
     console.log("el cabezal se encuentra aqui", posicion, cinta[posicion])
-    console.log(cases.includes(cinta[posicion]))
+    console.log(cases.includes(cinta[posicion-1]))
 
 
     
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i <= 3; i++) {        
 
-        switch (estadoActual) {
+        switch (cinta[posicion]) {
             case '0':
+                console.log("Entro a cero")
                 cinta[posicion] = 'X'
+                console.log(cinta)
+                console.log("la cinta se convirtio en --->", cinta[posicion])
                 posicion--;
-
+                console.log("Ahora estamos en la posicion----->", posicion)
                 // Ciclo para ignorar a la izquierda y ubicarnos sobre la variable
-                while (cases.includes(cinta[posicion])) {
-
+                console.log("comprobando la condicion",cases.includes(cinta[posicion]))
+                cases.includes(cinta[posicion])
+                let bandera=true
+                while ( bandera) {
+                    console.log(cinta[posicion])                    
+                    if(!cases.includes(cinta[posicion])){
+                        bandera=false
+                    }
                     posicion--;
 
                 }
+                posicion++
+                console.log("Salio del while, esta en la posiicon",posicion,cinta[posicion])
 
                 if (cinta[posicion] === aux) {
+                    console.log("Entro condicion del auxiliar")
+                    posicion++;
+                    cinta[posicion] = '0'
+                    posicion++;
+                    
+                }else{
+                    cinta[posicion] = '0';
+                    console.log("hizo el primer cambio",cinta);
                     posicion++;
                 }
-                cinta[posicion] = '0'
-                posicion++;
+                
+                
                 if (cinta[posicion] != condEscape) {
+                    
                     cinta[posicion] = 'X'
-                    while (cases.includes(cinta[posicion])) {
+                    console.log("tenemos la condicion de escape distinta",cinta)
+                    posicion++;
+                    let bandera1=true
+                    while (bandera1) {
+                        console.log(cinta[posicion])                    
+                        if(!cases.includes(cinta[posicion])){
+                            bandera1=false
+                        }
                         posicion++;
                     }
-                    cinta[posicion] = '0';
-                    posicion++;
+                    console.log("termino en la posicion para le segundo while",posicion)
+                    cinta[posicion-1]='0';
                 } else {
-                    while (esc.includes(cinta[posicion])) {
+                    let bandera1=true
+                    while (bandera1) {
+                        console.log(cinta[posicion])                    
+                        if(!cases.includes(cinta[posicion])){
+                            bandera1=false
+                        }
                         posicion++;
                     }
                     console.log("Este es el caracter ---->", cinta[posicion])
                     estadoActual = cinta[posicion]
-                    posicion=-1
-                    
+                    console.log("Entro a la condicion de escape");
+                    cinta[posicion-1]='0';                    
                 }
+                     
+                
                 break;
+
             case '1':
+
+                console.log("Entro a cero")
                 cinta[posicion] = 'Y'
+                console.log(cinta)
+                console.log("la cinta se convirtio en --->", cinta[posicion])
                 posicion--;
+                console.log("Ahora estamos en la posicion----->", posicion)
                 // Ciclo para ignorar a la izquierda y ubicarnos sobre la variable
-                while (cases.includes(cinta[posicion]) && posicion >= 0) {
+                console.log("comprobando la condicion",cases.includes(cinta[posicion]))
+                cases.includes(cinta[posicion])
+                let bandera3=true
+                while ( bandera3) {
+                    console.log(cinta[posicion])                    
+                    if(!cases.includes(cinta[posicion])){
+                        bandera3=false
+                    }
                     posicion--;
+
                 }
+                posicion++
+                console.log("Salio del while, esta en la posiicon",posicion,cinta[posicion])
 
                 if (cinta[posicion] === aux) {
+                    console.log("Entro condicion del auxiliar")
                     posicion++;
-                }
-                cinta[posicion] = '1'
-                posicion++;
-                if (cinta[posicion] != condEscape) {
-                    cinta[posicion] = 'Y'
-                    while (cases.includes(cinta[posicion]) && posicion < cinta.length) {
-                        posicion++;
-                    }
-                    cinta[posicion] = '1';
+                    cinta[posicion] = '1'
                     posicion++;
-                } else {
-                    while (esc.includes(cinta[posicion]) && posicion <= cinta.length) {
-                        posicion++;
-                        estadoActual = cinta[posicion]
-                    }
-                    console.log("Este es el caracter ----> ", cinta[posicion])
-                    estadoActual = cinta[posicion]
-                    posicion=-1
                     
+                }else{
+                    cinta[posicion] = '1';
+                    console.log("hizo el primer cambio",cinta);
+                    posicion++;
                 }
+                
+                
+                if (cinta[posicion] != condEscape) {
+                    
+                    cinta[posicion] = 'Y'
+                    console.log("tenemos la condicion de escape distinta",cinta)
+                    posicion++;
+                    let bandera1=true
+                    while (bandera1) {
+                        console.log(cinta[posicion])                    
+                        if(!cases.includes(cinta[posicion])){
+                            bandera1=false
+                        }
+                        posicion++;
+                    }
+                    console.log("termino en la posicion para le segundo while",posicion)
+                    cinta[posicion-1]='1';
+                } else {
+                    let bandera1=true
+                    while (bandera1) {
+                        console.log(cinta[posicion])                    
+                        if(!cases.includes(cinta[posicion])){
+                            bandera1=false
+                        }
+                        posicion++;
+                    }
+                    console.log("Este es el caracter ---->", cinta[posicion])
+                    estadoActual = cinta[posicion]
+                    console.log("Entro a la condicion de escape");
+                    cinta[posicion-1]='1';                    
+                }
+                    
+                
                 break;
             default:
                 estadoActual = cinta[posicion]
@@ -291,5 +369,6 @@ let asignarValor = (variable) => {
         }
         
     }
+     
     
 }
