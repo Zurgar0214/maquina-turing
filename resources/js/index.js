@@ -1,4 +1,4 @@
-let cadena = "A0000B0000C0000T0000S000011010000001001"; // 00 0110011010111101110111
+let cadena = "A0111B0000C0000T0000S010001"; // 00 0110011010111101110111
 let posicion = 0; // Posición de la cinta
 let cinta = cadena.split("");
 let estadoActual = 'A'; // Valor que se toma en el estado actual
@@ -46,13 +46,16 @@ let leerInstrucciones = () => {
                             case '0':
                                 posicion++;
                                 estadoActual = cinta[posicion]
-
+                                let variable;
                                 
                                 console.log("Entro a identificar variable---->",posicion,estadoActual)
-                                identificarVariable();
+                                variable=identificarVariable();
+                                asignarValor(variable);
                                 break;
                             case '1':
                                 console.log("Ejecutar Asignar Variable\n");
+
+                                desplazar()
                                 posicion++;
                             default:
                                 estadoActual == '-1';
@@ -63,6 +66,17 @@ let leerInstrucciones = () => {
                         posicion++;
                         switch (cinta[posicion]) {
                             case '0':
+
+                                posicion++;
+                                estadoActual = cinta[posicion]
+                                let variable;
+                                
+                                console.log("Entro a Desplazar---->",posicion,estadoActual)
+                                variable=identificarVariable();
+                                console.log("Esta es la posicion de la direccion",posicion)
+                                direccion=cinta[posicion]
+                                desplazar(variable,direccion);
+
                                 console.log("Ejecutar Desplazar\n");
                                 posicion++;
                                 break;
@@ -152,19 +166,20 @@ let identificarVariable = () => {
                     case '0':
                         posicion++;
 
-                        asignarValor("A");
+                        //asignarValor("A");                        
                         bandera = false
+                        return "A"
                         break;
                     case '1':
                         posicion++;
-                        asignarValor("B")
+                        //asignarValor("B")
                         bandera = false
-
+                        return "B"
                         break;
                     default:
                         estadoActual == '-1'
                         bandera = false
-
+                        return "No se identifico variable"
                         break;
                 }
                 break;
@@ -174,25 +189,26 @@ let identificarVariable = () => {
                     case '0':
                         posicion++;
                         console.log("Identifico a C como variable")
-                        asignarValor("C")                        
+                        //asignarValor("C")                        
                         bandera = false
+                        return "C"
 
                         break;
                     default:
                         estadoActual == '-1'
                         bandera = false
-
+                        return "No se identifico variable"
                         break;
                 }
                 break;
             default:
                 console.log("ALgo falla");
                 bandera = false
-
+                return "No se identifico variable"
                 break;
         }
     }
-}
+};
 
 let asignarValor = (variable) => {
 
@@ -218,10 +234,7 @@ let asignarValor = (variable) => {
         console.log("Entro a C")
     }
     console.log("el cabezal se encuentra aqui", posicion, cinta[posicion])
-    console.log(cases.includes(cinta[posicion-1]))
-
-
-    
+    console.log(cases.includes(cinta[posicion-1]))    
 
     for (let i = 0; i <= 3; i++) {        
 
@@ -371,4 +384,294 @@ let asignarValor = (variable) => {
     }
      
     
-}
+};
+
+let asignarVariable = () =>{};
+
+let sumar = () =>{};
+
+let desplazar = (variable, lado) =>{
+
+    let cases, salida // ignorar a la izquierda
+    let bandera=true // ++
+        
+    if (variable === "A" & lado == "0") {
+        cases = "A"  
+        salida= "B"      
+    } else if (variable === "A" & lado == "1") {
+        cases = "B"
+        salida = "A"
+    } else if(variable === "B" & lado == "0"){
+        cases = "B"
+        salida = "C"
+    } else if (variable === "B" & lado == "1"){
+        cases = "C"
+        salida = "B"
+    } else if (variable === "C" & lado == "0") {
+        cases = "C"
+        salida = "T"
+    }else {
+        cases = "T"
+        salida = "C"
+    }
+    console.log("el cabezal se encuentra aqui", posicion, cinta[posicion])
+    
+
+    //++ llegar hasta la variable en la cual se desea hacer el desplasamiento.
+    while ( bandera) {
+                           
+        if(cases === cinta[posicion]){
+            bandera=false;
+            posicion++;
+        }else{
+            posicion--;
+        }   
+
+    }
+
+    console.log("despues del while se encuentra en la posicion: ",posicion);
+    console.log("este es el lado",lado)
+
+    switch (lado) {
+        //desplazar Izquierda
+        case "0":
+            console.log("Entro a la primera condicion de direccion")
+            let ejecucion=true;
+            while (ejecucion) {
+
+                console.log("Esta en el for")
+                console.log("la posicion es: ",cinta[posicion])
+                switch (cinta[posicion]) {
+        
+                    case '1':
+        
+                        console.log("Entro a primer Uno ademas estamos en la posicion: ",posicion)
+                        cinta[posicion] = 'X'
+                        console.log(cinta)
+                        console.log("la cinta se convirtio en --->", cinta)
+                        posicion++;
+        
+                        
+                        console.log("Ahora estamos en la posicion----->", posicion)
+                        
+                        switch(cinta[posicion]){
+                            case '0':
+        
+                                console.log("Entro a cero")
+                                posicion--;
+                                cinta[posicion] = '0'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion++;
+                                console.log("Ahora estamos en la posicion----->", posicion)
+        
+                                break;
+        
+        
+                            case '1':
+        
+                                console.log("Entro a uno")
+                                posicion--;
+                                cinta[posicion] = '1'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion++;
+                                console.log("Ahora estamos en la posicion----->", posicion)
+        
+                                break;
+
+                            case 'B':
+                                console.log("Entro a B")
+                                posicion--;
+                                cinta[posicion] = '0';
+                                posicion++;
+                                console.log("termina en la posicion: ",posicion)
+                                console.log("y la cinta en esa posicion es: ", cinta[posicion])
+                                ejecucion=false;
+
+                                break;
+                        }                     
+                        
+                        break;
+        
+                    case '0':
+        
+                        console.log("Entro a primer Uno ademas estamos en la posicion: ",posicion)
+                        cinta[posicion] = 'X'
+                        console.log(cinta)
+                        console.log("la cinta se convirtio en --->", cinta)
+                        posicion++;
+        
+                        
+                        console.log("Ahora estamos en la posicion----->", posicion)
+                        
+                        switch(cinta[posicion]){
+                            case '0':
+        
+                                console.log("Entro a cero")
+                                posicion--;
+                                cinta[posicion] = '0'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion++;
+                                console.log("Ahora estamos en la posicion----->", posicion)
+        
+                                break;        
+        
+                            case '1':
+        
+                                console.log("Entro a uno")
+                                posicion--;
+                                cinta[posicion] = '1'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion++;
+                                console.log("Ahora estamos en la posicion----->", posicion)
+        
+                                break;
+
+                            case 'B':
+                                console.log("Entro a B")
+                                posicion--;
+                                cinta[posicion] = '0';
+                                posicion++;
+                                console.log("termina en la posicion: ",posicion)
+                                console.log("y la cinta en esa posicion es: ", cinta[posicion])
+                                ejecucion=false;
+
+                                break;
+                        }                       
+                                
+                        break;
+                    default:
+                        estadoActual = cinta[posicion]                
+                        break;
+                }
+                
+            }
+           
+            break;
+        // Desplazar Derecha
+        case 1:
+            console.log("Entro a la segunda condicion de direccion")
+            let ejecucion_uno=true;
+            while (ejecucion_uno) {
+
+                console.log("Esta en el for")
+                console.log("la posicion es: ",cinta[posicion])
+                switch (cinta[posicion]) {
+        
+                    case '1':
+        
+                        console.log("Entro a primer Uno ademas estamos en la posicion: ",posicion)
+                        cinta[posicion] = 'X'
+                        console.log(cinta)
+                        console.log("la cinta se convirtio en --->", cinta)
+                        posicion--;
+        
+                        
+                        console.log("Ahora estamos en la posicion----->", posicion)
+                        
+                        switch(cinta[posicion]){
+                            case '0':        
+                                console.log("Entro a cero")
+                                posicion++;
+                                cinta[posicion] = '0'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion++;
+                                console.log("Ahora estamos en la posicion----->", posicion)        
+                                break;
+        
+        
+                            case '1':        
+                                console.log("Entro a uno")
+                                posicion++;
+                                cinta[posicion] = '1'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion--;
+                                console.log("Ahora estamos en la posicion----->", posicion)        
+                                break;
+
+                            case salida:
+                                console.log("Entro a B")
+                                posicion++;
+                                cinta[posicion] = '0';
+                                posicion--;
+                                console.log("termina en la posicion: ",posicion)
+                                console.log("y la cinta en esa posicion es: ", cinta[posicion])
+                                ejecucion=false;
+
+                                break;
+                        }                     
+                        
+                        break;
+        
+                    case '0':
+        
+                        console.log("Entro a primer Uno ademas estamos en la posicion: ",posicion)
+                        cinta[posicion] = 'X'
+                        console.log(cinta)
+                        console.log("la cinta se convirtio en --->", cinta)
+                        posicion--;
+        
+                        
+                        console.log("Ahora estamos en la posicion----->", posicion)
+                        
+                        switch(cinta[posicion]){
+                            case '0':
+        
+                                console.log("Entro a cero")
+                                posicion++;
+                                cinta[posicion] = '0'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion--;
+                                console.log("Ahora estamos en la posicion----->", posicion)
+        
+                                break;        
+        
+                            case '1':
+        
+                                console.log("Entro a uno")
+                                posicion++;
+                                cinta[posicion] = '1'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
+                                posicion--;
+                                console.log("Ahora estamos en la posicion----->", posicion)        
+                                break;
+
+                            case salida:
+                                console.log("Entro a B")
+                                posicion++;
+                                cinta[posicion] = '0';
+                                posicion--;
+                                console.log("termina en la posicion: ",posicion)
+                                console.log("y la cinta en esa posicion es: ", cinta[posicion])
+                                ejecucion=false;
+                                break;
+                        }                
+                                
+                        break;
+                    default:
+                        estadoActual = cinta[posicion]                
+                        break;
+                }                
+            }           
+            break;        
+    
+        default:
+            break;
+    }
+
+    posicion=posicion.length;
+     
+
+
+
+};
+
+let compADos = () =>{};
+
