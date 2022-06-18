@@ -1,4 +1,4 @@
-let cadena = "A0000B0110C0110T0000S010100"; // 00 0110011010111101110111
+let cadena = "A1100B0110C0110T0000S00000101000010111110001"; // 00 0110011010111101110111
 let posicion = 0; // Posición de la cinta
 let cinta = cadena.split("");
 let estadoActual = 'A'; // Valor que se toma en el estado actual
@@ -54,9 +54,19 @@ let leerInstrucciones = () => {
                                 break;
                             case '1':
                                 console.log("Ejecutar Asignar Variable\n");
-
-                                desplazar()
+                                // Identificamos las variables a utilizar
                                 posicion++;
+                                estadoActual = cinta[posicion];
+                                let variable1=identificarVariable();
+                                estadoActual = cinta[posicion]
+                                let variable2=identificarVariable();
+                                pos=posicion;
+                                posicion--;
+                                asignarVariable(variable1, variable2);
+                                posicion=pos;
+                                break;
+                                
+
                             default:
                                 estadoActual == '-1';
                                 break;
@@ -69,30 +79,25 @@ let leerInstrucciones = () => {
 
                                 posicion++;
                                 estadoActual = cinta[posicion]
-                                let variable;
+                                
+                                let variable,lugar;
                                 
                                 console.log("Entro a Desplazar---->",posicion,estadoActual)
                                 variable=identificarVariable();
                                 console.log("Esta es la posicion de la direccion",posicion)
                                 direccion=cinta[posicion]
+                                lugar=posicion
                                 console.log("Esta es la  direccion",cinta[posicion])
-                                if (cinta[posicion-1]==1){
-                                    cinta[posicion]="Y"
-                                }else if(cinta[posicion-1]=="0"){
-                                    cinta[posicion]="X"
-                                }
+                                
                                 console.log("es la cadena marcada", cinta)
                                 
-                                estadoActual = cinta[posicion]
+                                estadoActual = cinta[posicion-1]
                                 desplazar(variable,direccion);
-                                if (cinta[posicion]=="Y"){
-                                    cinta[posicion]="1"
-                                }else{
-                                    cinta[posicion]="0"
-                                }
-
+                                
                                 console.log("Ejecutar Desplazar\n");
                                 posicion++;
+                                posicion=lugar
+                                console.log("esta es la posicion donde termina",posicion)
                                 break;
                             case '1':
                                 console.log("Ejecutar Sumar\n");
@@ -116,6 +121,14 @@ let leerInstrucciones = () => {
                             case '0':
                                 console.log("Ejecutar Complemento A2\n");
                                 posicion++;
+                                estadoActual = cinta[posicion]
+                                console.log("hasta el mmento esta en la posicion", posicion)
+                                variable=identificarVariable();
+                                pos=posicion
+                                compADos(variable)
+                                
+                                posicion=pos;
+                                
                                 break;
                             case '1':
                                 console.log("Ejecutar Inicio Repetir\n");
@@ -147,6 +160,7 @@ let leerInstrucciones = () => {
                 break;
             default:
                 console.log("ALgo falla");
+                estadoActual = '-1';
                 break;
         }
     }
@@ -166,8 +180,6 @@ let pasarbytes = () => {
     return -1
 
 };
-
-
 
 
 let identificarVariable = () => {
@@ -228,6 +240,7 @@ let asignarValor = (variable) => {
 
     let cases // ignorar a la izquierda
     let esc // ignorar a la derecha
+    let ejecutar=true;
     let aux
     let condEscape
     if (variable === "A") {
@@ -250,7 +263,8 @@ let asignarValor = (variable) => {
     console.log("el cabezal se encuentra aqui", posicion, cinta[posicion])
     console.log(cases.includes(cinta[posicion-1]))    
 
-    for (let i = 0; i <= 3; i++) {        
+    while(ejecutar){
+            
 
         switch (cinta[posicion]) {
             case '0':
@@ -315,9 +329,10 @@ let asignarValor = (variable) => {
                     console.log("Este es el caracter ---->", cinta[posicion])
                     estadoActual = cinta[posicion]
                     console.log("Entro a la condicion de escape");
-                    cinta[posicion-1]='0';                    
+                    cinta[posicion-1]='0';   
+                    ejecutar=false;                 
                 }
-                     
+                        
                 
                 break;
 
@@ -384,7 +399,8 @@ let asignarValor = (variable) => {
                     console.log("Este es el caracter ---->", cinta[posicion])
                     estadoActual = cinta[posicion]
                     console.log("Entro a la condicion de escape");
-                    cinta[posicion-1]='1';                    
+                    cinta[posicion-1]='1';  
+                    ejecutar=false;                  
                 }
                     
                 
@@ -395,12 +411,12 @@ let asignarValor = (variable) => {
                 break;
         }
         
+        
     }
-     
+
+    
     
 };
-
-let asignarVariable = () =>{};
 
 let sumar = () =>{};
 
@@ -431,10 +447,8 @@ let desplazar = (variable, lado) =>{
     console.log("el cabezal se encuentra aqui", posicion, cinta[posicion])
     
 
-    //++ llegar hasta la variable en la cual se desea hacer el desplasamiento.
-    
-
-    
+    //++ llegar hasta la variable en la cual se desea hacer el desplasamiento. 
+  
 
     switch (lado) {
         //desplazar Izquierda
@@ -583,8 +597,9 @@ let desplazar = (variable, lado) =>{
             console.log("este es el lado",lado)
             console.log("Entro a la segunda condicion de direccion")
             let ejecucion_uno=true;
-            for (let index = 0; index<=4; index++) {
-                
+            
+            while (ejecucion_uno) { 
+
                 console.log("Esta en el for",index)
                 console.log("la posicion es: ",cinta[posicion])
                 switch (cinta[posicion]) {
@@ -631,7 +646,6 @@ let desplazar = (variable, lado) =>{
                                 posicion--;
                                 console.log("Ahora estamos en la posicion----->", posicion)        
                                 break;
-
                                 
                         }                     
                         
@@ -679,7 +693,8 @@ let desplazar = (variable, lado) =>{
                                 console.log(cinta)
                                 console.log("la cinta se convirtio en --->", cinta[posicion])
                                 posicion--;
-                                console.log("Ahora estamos en la posicion----->", posicion)        
+                                console.log("Ahora estamos en la posicion----->", posicion) 
+                                ejecucion_uno=false       
                                 break;
                         }                
                                 
@@ -687,26 +702,283 @@ let desplazar = (variable, lado) =>{
                     default:
                         estadoActual = cinta[posicion]                
                         break;
-                }               
-                
-            }
-            /* while (ejecucion_uno) { 
-            }   */         
+                }   
+
+            }           
             break;        
     
         default:
             break;
     }
-
-    while(cinta[posicion]!= estadoActual){
-        posicion++
-    }
+    
     //posicion=posicion.length;
      
+};
 
+let compADos = (variable) =>{
+
+    let cases // ignorar a la izquierda    
+    let condEscape, bandera=true;
+    let banderaUno = true;
+    let banderaDos = true;
+    let banderaTres = true;
+
+    if (variable === "A") {
+        cases = "B"             
+        condEscape = 'A'
+
+    } else if (variable === "B") {
+        cases = "C"        
+        condEscape = 'B'
+    } else {
+        cases = "T"       
+        condEscape = 'C'        
+    }
+    
+
+    while ( bandera) {
+                            
+        if(cases === cinta[posicion]){
+            bandera=false;
+            posicion--;
+        }else{
+            posicion--;
+        }   
+    }
+    
+    console.log("Salio del primer while con posicion: ",posicion)
+
+    while (banderaUno){        
+
+        if(cinta[posicion]==="0"){
+            cinta[posicion]="1";
+            posicion-- ;
+        }else if(cinta[posicion]===condEscape){
+            banderaUno=false;
+            posicion++ ;
+        }else if(cinta[posicion]==="1"){
+            cinta[posicion]="0";
+            posicion-- ;
+        }
+    }
+
+    console.log("Salio del segundo while con posicion: ",posicion,cinta)
+
+    while (banderaDos){
+        
+        if(cases === cinta[posicion]){
+            banderaDos=false;
+            posicion--;
+        }else{
+            posicion++ ;
+        }       
+        
+    }
+
+    console.log("Salio del tercer while con posicion: ",posicion,cinta)
+
+
+    while (banderaTres){
+
+        if(cinta[posicion]===condEscape ){
+            banderaTres=false;
+            posicion++;
+        }else if(cinta[posicion]==="0"){
+            cinta[posicion]="1"
+            banderaTres=false;
+            posicion++; 
+        }
+        else{
+            cinta[posicion]="0"
+            posicion--;
+        }
+
+    };
+    console.log("el cabezal se encuentra aqui", posicion, cinta[posicion])
+    console.log(cases.includes(cinta[posicion-1]))    
 
 
 };
 
-let compADos = () =>{};
+let asignarVariable = (variable1, variable2) => {
+    let cases // ignorar a la izquierda
+    let esc // ignorar a la derecha
+    let aux
+    let condEscape
+    let bandera = true;
+    // Obtenemos las condiciones para la variable2
+    if (variable1 < variable2) {
 
+        let extra = ['X', 'Y', variable1] // Adicionales para ignorar a la derecha
+        let extraL = ['1', '0', 'Z', variable2] // Adicionales para ignorar a la izquierda
+        if (variable2 === "A") {
+            cases = ["0", "1", "S", "T", "C", "B"]
+            esc = ["0", "1", "S", "T", "C"]
+            aux = 'A'
+            condEscape = 'B'
+        } else if (variable2 === "B") {
+            cases = ["0", "1", "S", "T", "C"]
+            esc = ["0", "1", "S", "T"]
+            aux = 'B'
+            condEscape = 'C'
+        } else {
+            cases = ["0", "1", "S", "T"]
+            esc = ["0", "1", "S"]
+            aux = 'C'
+            condEscape = 'T'
+        }
+
+        while ((posicion >= 1) && (cinta[posicion] != variable2) && (posicion < cinta.length)) {
+            posicion--
+        }
+        posicion++ // Nos encontramos en variable2, nos movemos a la derecha
+        estadoActual = cadena[posicion] // identificada la segunda variable
+        while (bandera) {
+            cinta[posicion] === condEscape ? bandera = false : cinta[posicion] = 'Z'
+            posicion++
+        }
+        bandera = true;
+        while (bandera) {
+            while ((posicion >= 1) && (!extra.includes(cinta[posicion])) && (posicion < cinta.length)) {
+                posicion--
+            }
+            if (cinta[posicion] === variable1) {
+                posicion++
+            } else if (cinta[posicion] === 'X') {
+                cinta[posicion] = '0'
+                posicion++
+            } else if (cinta[posicion] === 'Y') {
+                cinta[posicion] = '1'
+                posicion++
+            }
+            estadoActual = cadena[posicion]
+            // Analizamos los casos
+            switch (estadoActual) {
+                case '1':
+                    cinta[posicion] = 'Y'
+                    posicion++
+                    while ((posicion >= 1) && (cinta[posicion] != variable2) && (posicion < cinta.length)) {
+                        posicion++
+                    }
+                    posicion++ // Nos encontramos en B, nos movemos a la derecha
+                    while ((posicion >= 1) && (cinta[posicion] != 'Z') && (posicion <= cinta.length)) {
+                        posicion++
+                    }
+                    if (cinta[posicion] === 'Z') {
+                        cinta[posicion] = '1';
+                    } else {
+                        bandera = false
+                    }
+                    posicion--
+                    break;
+                case '0':
+                    cinta[posicion] = 'X'
+                    posicion++
+                    while ((posicion >= 1) && (cinta[posicion] != variable2) && (posicion < cinta.length)) {
+                        posicion++
+                    }
+                    posicion++ // Nos encontramos en B, nos movemos a la derecha
+                    while ((posicion >= 1) && (cinta[posicion] != 'Z') && (posicion <= cinta.length)) {
+                        posicion++
+                    }
+                    if (cinta[posicion] === 'Z') {
+                        cinta[posicion] = '0';
+                    } else {
+                        bandera = false
+                    }
+                    posicion--
+                    break;
+                case variable2:
+                    bandera = false;
+                    break;
+                default:
+                    console.log('No se reconoce el caracter en la posición')
+                    bandera = false
+                    break;
+            }
+        }
+    } else {
+
+        let extraL = ['1', '0', 'Z', variable2] // Adicionales para ignorar a la izquierda
+        if (variable1 === "A") {
+            cases = ["0", "1", "S", "T", "C", "B"]
+            esc = ["0", "1", "S", "T", "C"]
+            aux = 'A'
+            condEscape = 'B'
+        } else if (variable1 === "B") {
+            cases = ["0", "1", "S", "T", "C"]
+            esc = ["0", "1", "S", "T"]
+            aux = 'B'
+            condEscape = 'C'
+        } else {
+            cases = ["0", "1", "S", "T"]
+            esc = ["0", "1", "S"]
+            aux = 'C'
+            condEscape = 'T'
+        }
+        let extra = ['X', 'Y', condEscape] // Adicionales para ignorar a la derecha
+        while ((posicion >= 1) && (cinta[posicion] != variable2) && (posicion < cinta.length)) {
+            posicion--
+        }
+        posicion++ // Nos encontramos en variable2, nos movemos a la derecha
+        estadoActual = cadena[posicion] // identificada la segunda variable
+        while (bandera) {
+            cinta[posicion] === aux ? bandera = false : cinta[posicion] = 'Z'
+            posicion++
+        }
+        bandera = true;
+        while (bandera) {
+            while ((posicion >= 1) && (!extra.includes(cinta[posicion])) && (posicion < cinta.length)) {
+                posicion++
+            }
+            if (cinta[posicion] === 'C') {
+                posicion--
+            }
+            if (cinta[posicion] === variable1) {
+            } else if (cinta[posicion] === 'X') {
+                cinta[posicion] = '0'
+                posicion--
+            } else if (cinta[posicion] === 'Y') {
+                cinta[posicion] = '1'
+                posicion--
+            }
+            estadoActual = cadena[posicion]
+            // Analizamos los casos
+            switch (estadoActual) {
+                case '1':
+                    cinta[posicion] = 'Y'
+                    posicion--
+                    while ((posicion >= 1) && (cinta[posicion] != 'Z') && (posicion <= cinta.length)) {
+                        posicion--
+                    }
+                    if (cinta[posicion] === 'Z') {
+                        cinta[posicion] = '1';
+                    } else {
+                        bandera = false
+                    }
+                    posicion++
+                    break;
+                case '0':
+                    cinta[posicion] = 'X'
+                    posicion--
+                    while ((posicion >= 1) && (cinta[posicion] != 'Z') && (posicion <= cinta.length)) {
+                        posicion--
+                    }
+                    if (cinta[posicion] === 'Z') {
+                        cinta[posicion] = '0';
+                    } else {
+                        bandera = false
+                    }
+                    posicion++
+                    break;
+                case condEscape:
+                    bandera = false;
+                    break;
+                default:
+                    console.log('No se reconoce el carácter en la posición')
+                    bandera = false
+                    break;
+            }
+        }
+    }
+};
