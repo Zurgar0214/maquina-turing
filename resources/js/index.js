@@ -1,4 +1,4 @@
-let cadena = "A0111B0000C0000T0000S010001"; // 00 0110011010111101110111
+let cadena = "A0000B0110C0110T0000S010100"; // 00 0110011010111101110111
 let posicion = 0; // Posición de la cinta
 let cinta = cadena.split("");
 let estadoActual = 'A'; // Valor que se toma en el estado actual
@@ -75,7 +75,21 @@ let leerInstrucciones = () => {
                                 variable=identificarVariable();
                                 console.log("Esta es la posicion de la direccion",posicion)
                                 direccion=cinta[posicion]
+                                console.log("Esta es la  direccion",cinta[posicion])
+                                if (cinta[posicion-1]==1){
+                                    cinta[posicion]="Y"
+                                }else if(cinta[posicion-1]=="0"){
+                                    cinta[posicion]="X"
+                                }
+                                console.log("es la cadena marcada", cinta)
+                                
+                                estadoActual = cinta[posicion]
                                 desplazar(variable,direccion);
+                                if (cinta[posicion]=="Y"){
+                                    cinta[posicion]="1"
+                                }else{
+                                    cinta[posicion]="0"
+                                }
 
                                 console.log("Ejecutar Desplazar\n");
                                 posicion++;
@@ -418,23 +432,25 @@ let desplazar = (variable, lado) =>{
     
 
     //++ llegar hasta la variable en la cual se desea hacer el desplasamiento.
-    while ( bandera) {
-                           
-        if(cases === cinta[posicion]){
-            bandera=false;
-            posicion++;
-        }else{
-            posicion--;
-        }   
+    
 
-    }
-
-    console.log("despues del while se encuentra en la posicion: ",posicion);
-    console.log("este es el lado",lado)
+    
 
     switch (lado) {
         //desplazar Izquierda
         case "0":
+            while ( bandera) {
+                           
+                if(cases === cinta[posicion]){
+                    bandera=false;
+                    posicion++;
+                }else{
+                    posicion--;
+                }   
+        
+            }
+            console.log("despues del while se encuentra en la posicion: ",posicion);
+            console.log("este es el lado",lado)
             console.log("Entro a la primera condicion de direccion")
             let ejecucion=true;
             while (ejecucion) {
@@ -480,7 +496,7 @@ let desplazar = (variable, lado) =>{
         
                                 break;
 
-                            case 'B':
+                            case salida:
                                 console.log("Entro a B")
                                 posicion--;
                                 cinta[posicion] = '0';
@@ -530,7 +546,7 @@ let desplazar = (variable, lado) =>{
         
                                 break;
 
-                            case 'B':
+                            case salida:
                                 console.log("Entro a B")
                                 posicion--;
                                 cinta[posicion] = '0';
@@ -552,12 +568,24 @@ let desplazar = (variable, lado) =>{
            
             break;
         // Desplazar Derecha
-        case 1:
+        case "1":
+            while ( bandera) {
+                           
+                if(cases === cinta[posicion]){
+                    bandera=false;
+                    posicion--;
+                }else{
+                    posicion--;
+                }   
+        
+            }
+            console.log("despues del while se encuentra en la posicion: ",posicion);
+            console.log("este es el lado",lado)
             console.log("Entro a la segunda condicion de direccion")
             let ejecucion_uno=true;
-            while (ejecucion_uno) {
-
-                console.log("Esta en el for")
+            for (let index = 0; index<=4; index++) {
+                
+                console.log("Esta en el for",index)
                 console.log("la posicion es: ",cinta[posicion])
                 switch (cinta[posicion]) {
         
@@ -574,18 +602,18 @@ let desplazar = (variable, lado) =>{
                         
                         switch(cinta[posicion]){
                             case '0':        
-                                console.log("Entro a cero")
+                                console.log("Entro a cero para evaluar segundo numero")
                                 posicion++;
                                 cinta[posicion] = '0'
                                 console.log(cinta)
                                 console.log("la cinta se convirtio en --->", cinta[posicion])
-                                posicion++;
+                                posicion--;
                                 console.log("Ahora estamos en la posicion----->", posicion)        
                                 break;
         
         
                             case '1':        
-                                console.log("Entro a uno")
+                                console.log("Entro a uno para evaluar segundo numero")
                                 posicion++;
                                 cinta[posicion] = '1'
                                 console.log(cinta)
@@ -595,15 +623,16 @@ let desplazar = (variable, lado) =>{
                                 break;
 
                             case salida:
-                                console.log("Entro a B")
+                                console.log("Entro a A para evaluar segundo numero")
                                 posicion++;
-                                cinta[posicion] = '0';
+                                cinta[posicion] = '0'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
                                 posicion--;
-                                console.log("termina en la posicion: ",posicion)
-                                console.log("y la cinta en esa posicion es: ", cinta[posicion])
-                                ejecucion=false;
-
+                                console.log("Ahora estamos en la posicion----->", posicion)        
                                 break;
+
+                                
                         }                     
                         
                         break;
@@ -622,7 +651,7 @@ let desplazar = (variable, lado) =>{
                         switch(cinta[posicion]){
                             case '0':
         
-                                console.log("Entro a cero")
+                                console.log("Entro a cero para evaluar segundo numero")
                                 posicion++;
                                 cinta[posicion] = '0'
                                 console.log(cinta)
@@ -634,7 +663,7 @@ let desplazar = (variable, lado) =>{
         
                             case '1':
         
-                                console.log("Entro a uno")
+                                console.log("Entro a uno para evaluar segundo numero")
                                 posicion++;
                                 cinta[posicion] = '1'
                                 console.log(cinta)
@@ -644,13 +673,13 @@ let desplazar = (variable, lado) =>{
                                 break;
 
                             case salida:
-                                console.log("Entro a B")
+                                console.log("Entro a A para evaluar segundo numero")
                                 posicion++;
-                                cinta[posicion] = '0';
+                                cinta[posicion] = '0'
+                                console.log(cinta)
+                                console.log("la cinta se convirtio en --->", cinta[posicion])
                                 posicion--;
-                                console.log("termina en la posicion: ",posicion)
-                                console.log("y la cinta en esa posicion es: ", cinta[posicion])
-                                ejecucion=false;
+                                console.log("Ahora estamos en la posicion----->", posicion)        
                                 break;
                         }                
                                 
@@ -658,15 +687,21 @@ let desplazar = (variable, lado) =>{
                     default:
                         estadoActual = cinta[posicion]                
                         break;
-                }                
-            }           
+                }               
+                
+            }
+            /* while (ejecucion_uno) { 
+            }   */         
             break;        
     
         default:
             break;
     }
 
-    posicion=posicion.length;
+    while(cinta[posicion]!= estadoActual){
+        posicion++
+    }
+    //posicion=posicion.length;
      
 
 
